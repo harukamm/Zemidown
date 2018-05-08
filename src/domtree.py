@@ -112,9 +112,10 @@ def split_and_unescape(s, sep):
     i = 0
     tmp = ""
     tkn = []
-    if 1 <= len(s) and s[0] == '|':
+    # Ignore a single `sep` in head and tail of `s`
+    if 1 <= len(s) and s[0] == sep:
         s = s[1:]
-    if 2 <= len(s) and s[-1] == '|' and s[-2] != '\\':
+    if 2 <= len(s) and s[-1] == sep and s[-2] != '\\':
         s = s[:-1]
     while True:
         if len(s) <= i:
