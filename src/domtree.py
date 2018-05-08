@@ -106,6 +106,30 @@ def until_ends_command(name, ptr, lines):
         i += 1
     return i , lst
 
+def skip(s, i, c):
+    assert 0 <= i
+    count = 0
+    while i < len(s) and s[i] == c:
+        i += 1
+        count += 1
+    return i , c * count
+
+def until(s, i, sep, raiseErr=False, disableUnescaped=False):
+    start = i
+    assert 0 <= i
+    while i < len(s):
+        if s[i] == sep:
+            break
+        elif s[i] == '\\':
+            if not disableUnescaped and i + 1 < len(s) and s[i + 1] == sep:
+                i += 1
+        i += 1
+    if raiseErr:
+        if len(s) <= i or s[i] != sep:
+            raise Exception("`" + s[start:] + "` must have `" + sep +
+              "` (in `" + s + "`)")
+    return i , s[start:i]
+
 def split_and_unescape(s, sep):
     if s == "":
         return []
@@ -154,52 +178,86 @@ def define_and_return_domtree(info):
     span.appendChild(TextNode(title))
     return span
 
-def make_inf_domtree(info):
-    # syntax : [-name] + "(" conclusion + "," + [ promise1, ... ] ")"
-    name = ""
-    m = re.match(r'-(\S+)\((.*)\)$', info)
-    if m:
-        name = m.group(1)
-        info = m.group(2)
-    else:
-        m = re.match(r'\((.*)\)$', info)
-        if m:
-            name = ""
-            info = m.group(1)
-        else:
-            print info
-            raise Exception("invalid inf: " + info)
+# inf := :inf( inf , [inf] )
+#      | string
 
-    i = 0
-    concl = ""
-    # read until first comma
-    while True:
-        if len(info) <= i:
-            raise Exception("invalid syntax :inf")
-        c = info[i]
-        if c == ',':
-            break
-        elif c == ',' and \
-             i + 1 < len(info) and info[i + 1] == ',':
-            concl += ','
-            i += 2
+def make_inf_domtree(info):
+    # inf := :inf( inf', [inf'] )
+    #
+    # inf' := :inf( inf', [inf'] )
+    #       | string
+    info = info.strip()
+    if ":inf" != info[:4]:
+        raise Exception("inf-command must starts with `:inf`")
+    _, tree = make_inf_domtree_impl(info, 0)
+    return tree
+
+def make_inf_domtree_impl(info, i):
+    i , _ = skip(info, i, ' ')
+    if info[i:].startswith(":inf"):
+        i += 4
+    else:
+        ptr1 , text1 = until(info, i, ',')
+        ptr2 , text2 = until(info, i, ']')
+        if ptr1 < len(info) and info[ptr1] == ',':
+            return ptr1 , TextNode(text1)
+        elif ptr2 < len(info) and info[ptr2] == ']':
+            return ptr2 , TextNode(text2)
         else:
-            concl += c
-            i += 1
-    others = info[i+1:].strip()
-    promises = split_and_unescape(others[1:-1], ',')
+            raise Exception("Inner inf-command ends illegally")
+
+    # Read the inference name if it is written
+    i , name = until(info, i, '(', raiseErr=True)
+    if len(name) != 0 and name[0] == '-':
+        name = name[1:]
+    i += 1 # Skip '('
+
+    # Find matched close parenthesis
+    k = i
+    nested = 0
+    while k < len(info):
+        if info[k] == '\\' and k + 1 < len(info):
+            if info[k + 1] == '(' or info[k + 1] == ')':
+                k += 1
+        elif info[k] == '(':
+            nested += 1
+        elif info[k] == ')':
+            if nested == 0:
+                break
+            nested -= 1
+        k += 1
+    assert k != len(info)
+
+    # Read the conclusion
+    rest = info[i:k]
+    i , concl_elm = make_inf_domtree_impl(rest, 0)
+    i += 1 # Skip ','
+
+    # Read the premises
+    rest = rest[i:]
+    i , _ = until(rest, 0, '[', raiseErr=True)
+    premise = rest[i:].rstrip()
+    assert premise[0] == '['
+    assert premise[-1] == ']'
+    j = 1
+    premise_elms = []
+    while j < len(premise) - 1:
+        j_nxt , p_elm = make_inf_domtree_impl(premise, j)
+        assert j < j_nxt
+        premise_elms.append(p_elm)
+        j = j_nxt + 1 # Consume ',' or ']'
+
     inf = Element("table.inf")
     # make domtree for promises
     up = Element("tr.inf_up")
-    if len(promises) != 0:
-        for p in promises:
-            t = TextNode(p.strip())
+    if len(premise_elms) != 0:
+        for p in premise_elms:
             td = Element("td")
-            td.appendChild(t)
+            td.appendChild(p)
             up.appendChild(td)
     else:
         # add dummy td-element if promises is empty
-        # in order to set name in the middle
+        # in order to set name  vertically center
         td = Element("td")
         td.appendChild(TextNode("\&nbsp;"))
         up.appendChild(td)
@@ -215,12 +273,12 @@ def make_inf_domtree(info):
     # make domtree for conslusion
     down = Element("tr.inf_down")
     dtd = Element("td")
-    dtd.setAttribute("colspan", str(len(promises)))
-    dtd.appendChild(TextNode(concl))
+    dtd.setAttribute("colspan", str(len(premise_elms)))
+    dtd.appendChild(concl_elm)
     down.appendChild(dtd)
     inf.appendChild(down)
 
-    return inf
+    return k + 1, inf
 
 def make_item_domtree(lines, with_number):
     tag = ""
@@ -308,7 +366,7 @@ def make_domtree_at_single_line(ptr, lines):
     line = lines[ptr]
     if line.startswith(":"):
         if line.startswith(":inf"):
-            return ptr + 1 , make_inf_domtree(line[4:])
+            return ptr + 1 , make_inf_domtree(line)
         elif line.startswith(":define"):
             return ptr + 1 , define_and_return_domtree(inf[7:])
         elif line.startswith(":---"):

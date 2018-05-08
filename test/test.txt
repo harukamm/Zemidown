@@ -6,7 +6,10 @@
 :sec 1
 
 :s
-:inf-ManyOpenParen((((hoge, [fuga])
+:inf-ManyOpenParen\(\(\((hoge, [fuga])
 :inf-inf1(hoge, [fuga, foo])
 :inf-Escapedinf1(hoge, [fuga\,foo])
+:inf-EscapedParent((((hoge)))\(, [])
+:inf-EscapedParent((((hoge)))\(, [fuga])
+:inf-Nested(A, [:inf-some(((1,)), [A]), :inf-some2(fuga, [A, B])])
 :e

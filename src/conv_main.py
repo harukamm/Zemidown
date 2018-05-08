@@ -213,6 +213,9 @@ def generate_html(input_fname, output_fname, title):
     f.write("<style>\n")
     f.write(styles.to_css())
     f.write("</style>\n")
+    f.write("<script type=\"text/javascript\">");
+    inject_scripts(f);
+    f.write("</script>");
     f.write(meta_tag)
     f.write("\n")
     f.write("<title>" + title + "</title>")
