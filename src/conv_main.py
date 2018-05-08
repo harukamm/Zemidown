@@ -3,7 +3,6 @@ from domtree import *
 import re
 import sys
 
-title = "tapl ch 1 - 3"
 keys = ["ch", "name", "sec", "file"]
 ch_lst = []
 default_style = [("tr.inf_down",
@@ -48,7 +47,6 @@ styles = None
 doctype_tag = "<!DOCTYPE html>"
 coding = "UTF-8"
 meta_tag = "<meta charset=\"" + coding + "\">"
-body_elem = Element("body")
 
 def init_styles():
     global styles
@@ -203,10 +201,11 @@ def create_index(chapters):
         ch_ul.appendChild(ch_li)
     return ch_ul
 
-def body_to_html():
-    return body_elem.to_html()
-
-def generate_html(output_fname):
+def generate_html(input_fname, output_fname, title):
+    chapters = parse_file(input_fname)
+    body_elem = Element("body")
+    body_elem.appendChild(create_index(chapters))
+    body_elem.appendChild(create_chapters_html(chapters))
     f = open(output_fname, 'w')
     f.write(doctype_tag)
     f.write("<html>\n")
@@ -218,7 +217,7 @@ def generate_html(output_fname):
     f.write("\n")
     f.write("<title>" + title + "</title>")
     f.write("</head>")
-    f.write(body_to_html())
+    f.write(body_elem.to_html())
     f.write("</html>\n")
     f.close()
     return
@@ -231,12 +230,9 @@ def on_load():
     init_styles()
     input_fname = args[1];
     output_fname = args[2];
+    title = "No title"
     if len(args) == 4:
-        global title
         title = args[3]
-    chapters = parse_file(input_fname)
-    body_elem.appendChild(create_index(chapters))
-    body_elem.appendChild(create_chapters_html(chapters))
-    generate_html(output_fname)
+    generate_html(input_fname, output_fname, title)
 
 on_load()
