@@ -1,0 +1,12 @@
+#
+
+:ch 0
+算術式のML実装
+
+:sec 1
+
+:s
+:inf-ManyOpenParen((((hoge, [fuga])
+:inf-inf1(hoge, [fuga, foo])
+:inf-Escapedinf1(hoge, [fuga\,foo])
+:e
