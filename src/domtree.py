@@ -122,8 +122,10 @@ def until(s, i, sep, raiseErr=False, disableUnescaped=False):
         if s[i] == sep:
             break
         elif s[i] == '\\':
-            if not disableUnescaped and i + 1 < len(s) and s[i + 1] == sep:
-                i += 1
+            if not disableUnescaped:
+                if i + 1 < len(s) and not s[i + 1].isalnum():
+                    i += 1
+        skipped += s[i]
         i += 1
     if raiseErr:
         if len(s) <= i or s[i] != sep:
@@ -147,10 +149,10 @@ def split_and_unescape(s, sep):
             if tmp != "":
                 tkn.append(tmp)
             break
-        if s[i] == '\\' and i + 1 < len(s) and \
-           s[i + 1] == sep:
-            tmp += sep
-            i += 2
+        if s[i] == '\\':
+            if i + 1 < len(s) and not s[i + 1].isalnum():
+                tmp += s[i]
+                i += 2
         elif s[i] == sep:
             tkn.append(tmp)
             tmp = ""

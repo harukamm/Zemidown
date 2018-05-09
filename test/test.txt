@@ -11,5 +11,7 @@
 :inf-Escapedinf1(hoge, [fuga\,foo])
 :inf-EscapedParent((((hoge)))\(, [])
 :inf-EscapedParent((((hoge)))\(, [fuga])
-:inf-Nested(A, [:inf-some(((1,)), [A]), :inf-some2(fuga, [A, B])])
+:inf-Nested(A, [:inf-some(((1\,)), [A]), :inf-some2(fuga, [A, B])])
+:inf-TA-IF(Γ|→ if t1 then t2 else t3 : T, [Γ|→ t1 : T1, T1 = Bot, Γ|→ t2 : T2, Γ|→ t3 : T3, T2 v T3 = T])
+:inf-InvkNew((new C(<v>)).m(<u>), [mbody(m\, C) = (<x>\, t0)])
 :e
