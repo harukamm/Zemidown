@@ -12,10 +12,12 @@ default_style = [("tr.inf_down",
                    ("padding", "0 10px")]),
                  ("tr.inf_up > td",
                   [("padding", "0px 10px"),
-                   ("text-align", "center")]),
-                 ("td.inf_name",
+                   ("text-align", "center"),
+                   ("vertical-align", "bottom")]),
+                 ("tr.inf_up > td.inf_name",
                   [("vertical-align", "middle"),
-                   ("font-size", "50%")]),
+                   ("font-size", "50%"),
+                   ("padding", "0px")]),
                  ("table.inf",
                   [("border-collapse", "collapse"),
                    ("padding", "10px")]),
@@ -47,6 +49,7 @@ styles = None
 doctype_tag = "<!DOCTYPE html>"
 coding = "UTF-8"
 meta_tag = "<meta charset=\"" + coding + "\">"
+inline_scripts = ["src/script.js"]
 
 def init_styles():
     global styles
@@ -200,6 +203,15 @@ def create_index(chapters):
         ch_li.appendChild(sc_ul)
         ch_ul.appendChild(ch_li)
     return ch_ul
+
+def inject_scripts(f):
+    f.write('\n')
+    for fname in inline_scripts:
+      script = open(fname, 'r')
+      for line in script:
+        f.write(line)
+    f.write('\n')
+    return
 
 def generate_html(input_fname, output_fname, title):
     chapters = parse_file(input_fname)
