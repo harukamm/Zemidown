@@ -1,0 +1,28 @@
+#
+
+:ch 4
+算術式のML実装
+
+:sec 2
+評価
+
+:s
+\<b id="4.2.2">演習 4.2.2</b> arith の実装における eval 関数の定義を、演習 3.5.17 で導入された大ステップスタイルに変えよ。
+
+
+[大ステップの評価]
+:s-box
+:inf-B-Value(v ↓ v, [])
+:inf-B-IfTrue(if t1 then t2 else t3 ↓ v2, [t1 ↓ true, t2 ↓ v2])
+:inf-B-IfFalse(if t1 then t2 else t3 ↓ v3, [t1 ↓ false, t3 ↓ v3])
+:inf-B-Succ(succ t1 ↓ succ nv1, [t1 ↓ nv1])
+:inf-B-PredZero(pred t1 ↓ 0, [t1 ↓ 0])
+:inf-B-PredSucc(pred t1 ↓ succ nv1, [t1 ↓ 0])
+:inf-B-IsZeroSucc(iszero t1 ↓ false, [t1 ↓ succ nv1])
+:e-box
+
+
+[実装]
+\<img src="big_step_eval.png">
+
+:e
