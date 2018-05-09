@@ -11,4 +11,8 @@ do
   exe="python ${src_dir}/conv_main.py ${input} ${output}"
   echo $exe
   ${exe}
+  ret=$?
+  if [ $ret -ne 0 ]; then
+    exit 1
+  fi
 done
