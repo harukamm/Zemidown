@@ -117,6 +117,7 @@ def skip(s, i, c):
 def until(s, i, sep, raiseErr=False, disableUnescaped=False):
     start = i
     assert 0 <= i
+    skipped = ""
     while i < len(s):
         if s[i] == sep:
             break
@@ -128,7 +129,7 @@ def until(s, i, sep, raiseErr=False, disableUnescaped=False):
         if len(s) <= i or s[i] != sep:
             raise Exception("`" + s[start:] + "` must have `" + sep +
               "` (in `" + s + "`)")
-    return i , s[start:i]
+    return i , skipped
 
 def split_and_unescape(s, sep):
     if s == "":
