@@ -153,8 +153,8 @@ def split_and_unescape(s, sep):
                 tkn.append(tmp)
             break
         if s[i] == '\\':
-            if i + 1 < len(s) and not s[i + 1].isalnum():
-                tmp += s[i]
+            if i + 1 < len(s):
+                tmp += s[i + 1]
                 i += 2
         elif s[i] == sep:
             tkn.append(tmp)
