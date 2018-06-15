@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import re
 
 env = []
@@ -478,11 +481,14 @@ class Section:
     def to_html(self):
         idname = "sec" + str(self.ch_n) + "_" + str(self.n)
         elem = Element("div.sec#" + idname)
-        link = LinkNode("#" + idname, "&nbsp;#&nbsp;")
-        elem.appendChild(link)
-        title = TextNode(" section " + str(self.ch_n) + \
+        header = Element("div.sec_header")
+        link = LinkNode("#" + idname, "&nbsp;◆&nbsp;")
+        header.appendChild(link)
+        header.appendChild(TextNode(" "))
+        title = TextNode("section " + str(self.ch_n) + \
                          "-" + str(self.n) + ". " + self.title)
-        elem.appendChild(Element("span.sec_title").appendChild(title))
+        header.appendChild(Element("span.sec_title").appendChild(title))
+        elem.appendChild(header)
         elem.appendChild(make_domtree(self.content).addClass("sec_content"))
         return elem
 
