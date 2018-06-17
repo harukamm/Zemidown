@@ -1,3 +1,5 @@
+ofname: test
+
 #
 
 :ch 0

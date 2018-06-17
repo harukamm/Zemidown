@@ -218,10 +218,13 @@ def inject_scripts(f):
     f.write('\n')
     return
 
-def generate_html(input_fname, output_fname):
+def generate_html(input_fname):
     parsed_result = parse_file(input_fname)
     chapters = parsed_result.get('chapters', [])
     title = parsed_result.get('title', '')
+    _, default_oname = input_fname.rsplit('/', 1)
+    output_fname = 'out/' +\
+        parsed_result.get('ofname', default_oname) + '.html'
     body_elem = Element("body")
     body_elem.appendChild(create_index(chapters))
     body_elem.appendChild(create_chapters_html(chapters))
@@ -246,12 +249,11 @@ def generate_html(input_fname, output_fname):
 
 def on_load():
     args = sys.argv
-    if len(args) != 3:
-        print "syntax: python conv_main.py <file-path> <output>"
+    if len(args) != 2:
+        print "syntax: python conv_main.py <file-path>"
         return
     init_styles()
     input_fname = args[1];
-    output_fname = args[2];
-    generate_html(input_fname, output_fname)
+    generate_html(input_fname)
 
 on_load()
