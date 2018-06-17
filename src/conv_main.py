@@ -71,15 +71,16 @@ def parse_file(fname):
     i = 0
     length = len(lines)
 
+    result = {}
     # read header
-    header = []
     while True:
         if i == length:
             raise Exception("header error")
         elif lines[i][0] == '#':
             break
-        elif lines[i] != "":
-            header.append(lines[i])
+        elif lines[i].find(':') != -1:
+            prop, val = lines[i].split(':', 1)
+            result[prop.strip()] = val.strip()
         i += 1
 
     # read chapters
@@ -96,7 +97,9 @@ def parse_file(fname):
             chapters.append(chapter)
             continue
         i += 1
-    return chapters
+    result['chapters'] = chapters
+
+    return result
 
 def parse_content_until_end(ptr, lines):
     i = ptr
@@ -215,8 +218,10 @@ def inject_scripts(f):
     f.write('\n')
     return
 
-def generate_html(input_fname, output_fname, title):
-    chapters = parse_file(input_fname)
+def generate_html(input_fname, output_fname):
+    parsed_result = parse_file(input_fname)
+    chapters = parsed_result.get('chapters', [])
+    title = parsed_result.get('title', '')
     body_elem = Element("body")
     body_elem.appendChild(create_index(chapters))
     body_elem.appendChild(create_chapters_html(chapters))
@@ -241,15 +246,12 @@ def generate_html(input_fname, output_fname, title):
 
 def on_load():
     args = sys.argv
-    if len(args) != 3 and len(args) != 4:
-        print "syntax: python conv_main.py <file-path> <output> [title]"
+    if len(args) != 3:
+        print "syntax: python conv_main.py <file-path> <output>"
         return
     init_styles()
     input_fname = args[1];
     output_fname = args[2];
-    title = "No title"
-    if len(args) == 4:
-        title = args[3]
-    generate_html(input_fname, output_fname, title)
+    generate_html(input_fname, output_fname)
 
 on_load()
