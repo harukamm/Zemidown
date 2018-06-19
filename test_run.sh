@@ -2,7 +2,12 @@
 
 src_dir="src"
 test_dir="test"
-out_dir=$test_dir
+out_dir="out"
+
+if [ ! -d $out_dir ]
+then
+    mkdir $out_dir
+fi
 
 for fname in `ls ${test_dir}/*.txt | xargs -n 1 basename`
 do
