@@ -460,13 +460,13 @@ class Chapter:
         return elem
 
     def damp(self):
-        print "chapter-start " + str(self.n)
-        print self.title
+        print("chapter-start " + str(self.n))
+        print(self.title)
         for line in self.content:
-            print line
+            print(line)
         for sec in self.sections:
             sec.damp()
-        print "chapter-start " + str(self.n)
+        print("chapter-start " + str(self.n))
 
 class Section:
     def __init__(self, ch_n, n, title, content):
@@ -493,11 +493,11 @@ class Section:
         return elem
 
     def damp(self):
-        print "section-start " + str(self.n)
-        print self.title
+        print("section-start " + str(self.n))
+        print(self.title)
         for line in self.content:
-            print line
-        print "section-end " + str(self.n)
+            print(line)
+        print("section-end " + str(self.n))
 
 ########################################
 # Class for Style sheet

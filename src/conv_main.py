@@ -62,7 +62,7 @@ def init_styles():
         for p , v in props:
             b.appendProp(p, v)
         styles.appendBlock(b)
-    # print styles.to_css()
+    # print(styles.to_css())
 
 def parse_file(fname):
     f = open(fname, "r")
@@ -218,12 +218,12 @@ def inject_scripts(f):
     f.write('\n')
     return
 
-def generate_html(input_fname):
+def generate_html(out_dir, input_fname):
     parsed_result = parse_file(input_fname)
     chapters = parsed_result.get('chapters', [])
     title = parsed_result.get('title', '')
     _, default_oname = input_fname.rsplit('/', 1)
-    output_fname = 'out/' +\
+    output_fname = out_dir + '/' +\
         parsed_result.get('ofname', default_oname) + '.html'
     body_elem = Element("body")
     body_elem.appendChild(create_index(chapters))
@@ -249,11 +249,12 @@ def generate_html(input_fname):
 
 def on_load():
     args = sys.argv
-    if len(args) != 2:
-        print "syntax: python conv_main.py <file-path>"
+    if len(args) != 3:
+        print("syntax: python conv_main.py <out-dir> <file-path>")
         return
     init_styles()
-    input_fname = args[1];
-    generate_html(input_fname)
+    out_dir = args[1]
+    input_fname = args[2]
+    generate_html(out_dir, input_fname)
 
 on_load()

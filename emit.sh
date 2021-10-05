@@ -12,7 +12,7 @@ fi
 for fname in `ls ${test_dir}/*.txt | xargs -n 1 basename`
 do
   input="${test_dir}/${fname}"
-  exe="python ${src_dir}/conv_main.py ${input}"
+  exe="python3 ${src_dir}/conv_main.py ${out_dir} ${input}"
   echo $exe
   ${exe}
   ret=$?
