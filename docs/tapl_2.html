@@ -1,0 +1,81 @@
+<!DOCTYPE html><html>
+<head>
+<style>
+tr.inf_down {
+border-top: 1px solid #000;
+}
+tr.inf_down > td {
+text-align: center;
+padding: 0 10px;
+}
+tr.inf_up > td {
+padding: 0px 10px;
+text-align: center;
+vertical-align: bottom;
+}
+tr.inf_up > td.inf_name {
+vertical-align: middle;
+font-size: 50%;
+padding: 0px;
+}
+table.inf {
+border-collapse: collapse;
+padding: 10px;
+}
+tr.horizon > td {
+padding: 0 10px;
+}
+ul.no_num {
+list-style: none;
+}
+.box {
+padding: 10px;
+margin-bottom: 10px;
+display: inline-block;
+border: 1px solid #333;
+}
+.ch_title {
+font-weight: bolder;
+font-size: 130%;
+}
+.ch {
+margin: 10px 0;
+}
+.ch_content {
+}
+.sec_header {
+padding-bottom: 10px;
+}
+.sec_title {
+font-weight: normal;
+font-size: 120%;
+}
+.sec {
+margin: 20px 0;
+}
+.sec_content {
+margin-left: 20px;
+}
+</style>
+<script type="text/javascript">
+function onload(event) {
+  var nodes = document.querySelectorAll("td.inf_name");
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    var up = node.parentElement;
+    var down = up && up.nextElementSibling;
+    if (!down)
+      continue;
+    if (up.className != "inf_up" || down.className != "inf_down")
+      continue;
+    var up_height = up.clientHeight;
+    var down_height = down.clientHeight;
+    if (down_height < up_height)
+      node.style.paddingTop = (up_height - down_height) + "px";
+  }
+};
+
+window.addEventListener("load", onload);
+
+</script><meta charset="UTF-8">
+<title></title></head><body><ul><li><a href="#ch4">ch.4</a> 算術式のML実装<ul class="no_num"><li><a href="#sec4_2">4-2</a> 評価</li></ul></li></ul><ul class="no_num"><li><div id="ch4" class="ch"><a href="#ch4">&nbsp;#&nbsp;</a><span class="ch_title"> chapter 4. 算術式のML実装</span><ul class="no_num"><li><div id="sec4_2" class="sec"><div class="sec_header"><a href="#sec4_2">&nbsp;◆&nbsp;</a> <span class="sec_title">section 4-2. 評価</span></div><div class="sec_content"><b id="4.2.2">演習 4.2.2</b> arith の実装における eval 関数の定義を、演習 3.5.17 で導入された大ステップスタイルに変えよ。<br><br><br>[大ステップの評価]<br><span class="box"><table class="inf"><tr class="inf_up"><td>&nbsp;</td><td class="inf_name" rowspan="2">B-Value</td></tr><tr class="inf_down"><td colspan="0">v ↓ v</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ true</td><td>t2 ↓ v2</td><td class="inf_name" rowspan="2">B-IfTrue</td></tr><tr class="inf_down"><td colspan="2">if t1 then t2 else t3 ↓ v2</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ false</td><td>t3 ↓ v3</td><td class="inf_name" rowspan="2">B-IfFalse</td></tr><tr class="inf_down"><td colspan="2">if t1 then t2 else t3 ↓ v3</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ nv1</td><td class="inf_name" rowspan="2">B-Succ</td></tr><tr class="inf_down"><td colspan="1">succ t1 ↓ succ nv1</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ 0</td><td class="inf_name" rowspan="2">B-PredZero</td></tr><tr class="inf_down"><td colspan="1">pred t1 ↓ 0</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ 0</td><td class="inf_name" rowspan="2">B-PredSucc</td></tr><tr class="inf_down"><td colspan="1">pred t1 ↓ succ nv1</td></tr></table><table class="inf"><tr class="inf_up"><td>t1 ↓ succ nv1</td><td class="inf_name" rowspan="2">B-IsZeroSucc</td></tr><tr class="inf_down"><td colspan="1">iszero t1 ↓ false</td></tr></table></span><br><br>[実装]<br><img src="big_step_eval.png"><br><br></div></div></li></ul></div></li></ul></body></html>

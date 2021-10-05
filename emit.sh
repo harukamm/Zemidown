@@ -2,7 +2,7 @@
 
 src_dir="src"
 test_dir="test"
-out_dir="out"
+out_dir="docs"
 
 if [ ! -d $out_dir ]
 then

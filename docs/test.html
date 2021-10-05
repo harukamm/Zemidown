@@ -1,0 +1,81 @@
+<!DOCTYPE html><html>
+<head>
+<style>
+tr.inf_down {
+border-top: 1px solid #000;
+}
+tr.inf_down > td {
+text-align: center;
+padding: 0 10px;
+}
+tr.inf_up > td {
+padding: 0px 10px;
+text-align: center;
+vertical-align: bottom;
+}
+tr.inf_up > td.inf_name {
+vertical-align: middle;
+font-size: 50%;
+padding: 0px;
+}
+table.inf {
+border-collapse: collapse;
+padding: 10px;
+}
+tr.horizon > td {
+padding: 0 10px;
+}
+ul.no_num {
+list-style: none;
+}
+.box {
+padding: 10px;
+margin-bottom: 10px;
+display: inline-block;
+border: 1px solid #333;
+}
+.ch_title {
+font-weight: bolder;
+font-size: 130%;
+}
+.ch {
+margin: 10px 0;
+}
+.ch_content {
+}
+.sec_header {
+padding-bottom: 10px;
+}
+.sec_title {
+font-weight: normal;
+font-size: 120%;
+}
+.sec {
+margin: 20px 0;
+}
+.sec_content {
+margin-left: 20px;
+}
+</style>
+<script type="text/javascript">
+function onload(event) {
+  var nodes = document.querySelectorAll("td.inf_name");
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    var up = node.parentElement;
+    var down = up && up.nextElementSibling;
+    if (!down)
+      continue;
+    if (up.className != "inf_up" || down.className != "inf_down")
+      continue;
+    var up_height = up.clientHeight;
+    var down_height = down.clientHeight;
+    if (down_height < up_height)
+      node.style.paddingTop = (up_height - down_height) + "px";
+  }
+};
+
+window.addEventListener("load", onload);
+
+</script><meta charset="UTF-8">
+<title></title></head><body><ul><li><a href="#ch0">ch.0</a> 算術式のML実装<ul class="no_num"><li><a href="#sec0_1">0-1</a> </li></ul></li></ul><ul class="no_num"><li><div id="ch0" class="ch"><a href="#ch0">&nbsp;#&nbsp;</a><span class="ch_title"> chapter 0. 算術式のML実装</span><ul class="no_num"><li><div id="sec0_1" class="sec"><div class="sec_header"><a href="#sec0_1">&nbsp;◆&nbsp;</a> <span class="sec_title">section 0-1. </span></div><div class="sec_content"><table class="inf"><tr class="inf_up"><td>fuga</td><td class="inf_name" rowspan="2">ManyOpenParen(((</td></tr><tr class="inf_down"><td colspan="1">hoge</td></tr></table><table class="inf"><tr class="inf_up"><td>fuga</td><td>foo</td><td class="inf_name" rowspan="2">inf1</td></tr><tr class="inf_down"><td colspan="2">hoge</td></tr></table><table class="inf"><tr class="inf_up"><td>fuga,foo</td><td class="inf_name" rowspan="2">Escapedinf1</td></tr><tr class="inf_down"><td colspan="1">hoge</td></tr></table><table class="inf"><tr class="inf_up"><td>&nbsp;</td><td class="inf_name" rowspan="2">EscapedParent</td></tr><tr class="inf_down"><td colspan="0">(((hoge)))(</td></tr></table><table class="inf"><tr class="inf_up"><td>fuga</td><td class="inf_name" rowspan="2">EscapedParent</td></tr><tr class="inf_down"><td colspan="1">(((hoge)))(</td></tr></table><table class="inf"><tr class="inf_up"><td><table class="inf"><tr class="inf_up"><td>A</td><td class="inf_name" rowspan="2">some</td></tr><tr class="inf_down"><td colspan="1">((1,))</td></tr></table></td><td><table class="inf"><tr class="inf_up"><td>A</td><td>B</td><td class="inf_name" rowspan="2">some2</td></tr><tr class="inf_down"><td colspan="2">fuga</td></tr></table></td><td class="inf_name" rowspan="2">Nested</td></tr><tr class="inf_down"><td colspan="2">A</td></tr></table><table class="inf"><tr class="inf_up"><td>Γ|→ t1 : T1</td><td>T1 = Bot</td><td>Γ|→ t2 : T2</td><td>Γ|→ t3 : T3</td><td>T2 v T3 = T</td><td class="inf_name" rowspan="2">TA-IF</td></tr><tr class="inf_down"><td colspan="5">Γ|→ if t1 then t2 else t3 : T</td></tr></table><table class="inf"><tr class="inf_up"><td>mbody(m, C) = (&lt;x&gt;, t0)</td><td class="inf_name" rowspan="2">InvkNew</td></tr><tr class="inf_down"><td colspan="1">(new C(&lt;v&gt;)).m(&lt;u&gt;)</td></tr></table></div></div></li></ul></div></li></ul></body></html>
